@@ -1,0 +1,15 @@
+{
+    "Lua.diagnostics.disable": [
+        "undefined-field",
+        "deprecated",
+        "param-type-mismatch"
+    ],
+    "diagnostics.globals": [
+        "ViragDevTool",
+        "SlashCmdList"
+    ],
+    "workspace.ignoreDir": [
+        ".vscode",
+        "libs"
+    ]
+}

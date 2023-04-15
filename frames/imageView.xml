@@ -1,0 +1,44 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\..\FrameXML\UI.xsd">
+
+    <!--What should the parent name be? Do we have the parent as the main window as the parent?-->
+    <Frame name="ONSImageViewTemplate" virtual ="true" hidden="true" toplevel="true" enableMouse="true">
+        <Size x="300" y="300"/>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture atlas="auctionhouse-background-buy-commodities">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativePoint="TOPLEFT" />
+                        <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" />
+                    </Anchors>
+                </Texture>
+                <FontString name="$parentImageView" inherits="GameFontNormal" justifyH="CENTER" text="Image View">
+                    <Size x="300" y="0" />
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture parentKey="img">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="2" y="-2" />
+                        <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-2" y="2"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button parentKey="menuButton" frameLevel="800">
+                <Size x="30" y="30" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="2" y="-2" />
+                </Anchors>
+                <NormalTexture atlas="Gamepad_Ltr_Menu_32" alpha="0.6"/>
+                <HighlightTexture atlas="Gamepad_Ltr_Menu_32" alpha="0.8"/>
+                <PushedTexture atlas="Gamepad_Ltr_Menu_32" alpha="1"/>
+            </Button>
+        </Frames>
+    </Frame>
+</Ui>
