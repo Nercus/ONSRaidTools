@@ -1,5 +1,5 @@
 local AddOnName, _ = ...
-local ONSImageView = LibStub("AceAddon-3.0"):NewAddon(AddOnName, "AceEvent-3.0")
+local ONSRaidTools = LibStub("AceAddon-3.0"):NewAddon(AddOnName, "AceEvent-3.0")
 
 
 local LDBIcon = LibStub("LibDBIcon-1.0")
@@ -19,11 +19,11 @@ local defaults = {
     }
 }
 
-local ONSImageViewBroker = LibStub("LibDataBroker-1.1"):NewDataObject(AddOnName, {
+local ONSRaidToolsBroker = LibStub("LibDataBroker-1.1"):NewDataObject(AddOnName, {
     type = "data source",
-    icon = "Interface\\Addons\\ONSImageView\\assets\\ons_icon",
+    icon = "Interface\\Addons\\ONSRaidTools\\assets\\ons_icon",
     OnClick = function(self, button)
-        ONSImageView:ToggleFrame()
+        ONSRaidTools:ToggleFrame()
     end,
     OnTooltipShow = function(tooltip)
         tooltip:AddLine(AddOnName)
@@ -32,20 +32,20 @@ local ONSImageViewBroker = LibStub("LibDataBroker-1.1"):NewDataObject(AddOnName,
 })
 
 
-function ONSImageView:OnEnable()
+function ONSRaidTools:OnEnable()
     C_Timer.After(1, function()
         self:ToggleFrame()
     end)
-    ONSImageView:RegisterEvent("MODIFIER_STATE_CHANGED")
+    ONSRaidTools:RegisterEvent("MODIFIER_STATE_CHANGED")
 end
 
-function ONSImageView:OnInitialize()
-    self.db = LibStub("AceDB-3.0"):New("ONSImageViewDB", defaults)
+function ONSRaidTools:OnInitialize()
+    self.db = LibStub("AceDB-3.0"):New("ONSRaidToolsDB", defaults)
 
-    LDBIcon:Register(AddOnName, ONSImageViewBroker, self.db.global.options.minimap)
+    LDBIcon:Register(AddOnName, ONSRaidToolsBroker, self.db.global.options.minimap)
 end
 
-function ONSImageView:UpdateMinimapButton()
+function ONSRaidTools:UpdateMinimapButton()
     if (self.db.global.options.minimap.hide) then
         LDBIcon:Hide(AddOnName)
     else
@@ -53,7 +53,7 @@ function ONSImageView:UpdateMinimapButton()
     end
 end
 
-function ONSImageView:ToggleMinimapButton()
+function ONSRaidTools:ToggleMinimapButton()
     if (self.db.global.options.minimap.hide) then
         self.db.global.options.minimap.hide = false
     else
@@ -68,8 +68,8 @@ SlashCmdList["ONS"] = function(msg)
     if msg == "settings" or msg == "config" then
         -- TODO: Add options
     elseif msg == "minimap" then
-        ONSImageView:ToggleMinimapButton()
+        ONSRaidTools:ToggleMinimapButton()
     else
-        ONSImageView:ToggleFrame()
+        ONSRaidTools:ToggleFrame()
     end
 end

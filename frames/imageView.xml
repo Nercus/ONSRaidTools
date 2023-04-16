@@ -3,7 +3,7 @@
 ..\..\FrameXML\UI.xsd">
 
     <!--What should the parent name be? Do we have the parent as the main window as the parent?-->
-    <Frame name="ONSImageViewTemplate" virtual ="true" hidden="true" toplevel="true" enableMouse="true">
+    <Frame name="ONSRaidToolsTemplate" virtual ="true" hidden="true" toplevel="true" enableMouse="true">
         <Size x="300" y="300"/>
         <Layers>
             <Layer level="BACKGROUND">

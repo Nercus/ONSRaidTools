@@ -1,5 +1,5 @@
 local AddOnName, _ = ...
-local ONSImageView = LibStub("AceAddon-3.0"):GetAddon(AddOnName)
+local ONSRaidTools = LibStub("AceAddon-3.0"):GetAddon(AddOnName)
 
 
 local VIEWS = {
@@ -14,7 +14,7 @@ local function createWindow()
     return frame
 end
 
-function ONSImageView:AddListernersToView(view)
+function ONSRaidTools:AddListernersToView(view)
     if not view then return print("view is nil") end
     view:SetScript("OnEnter", function(f)
         if IsShiftKeyDown() then
@@ -24,13 +24,13 @@ function ONSImageView:AddListernersToView(view)
     end)
 end
 
-function ONSImageView:GetCurrentView()
+function ONSRaidTools:GetCurrentView()
     if not self.activeView then return end
     local current = self:GetViewByName(self.activeView)
     return current
 end
 
-function ONSImageView:AddMainListeners()
+function ONSRaidTools:AddMainListeners()
     local frame = self.mainWindow
     frame:SetScript("OnDragStart", function(f)
         f:StartMoving()
@@ -63,7 +63,7 @@ function ONSImageView:AddMainListeners()
     end)
 end
 
-function ONSImageView:SetInitPosition()
+function ONSRaidTools:SetInitPosition()
     local x, y, point, relativePoint
     if self.db.global.position then
         x = self.db.global.position.x
@@ -77,11 +77,11 @@ function ONSImageView:SetInitPosition()
 end
 
 local function createImageView()
-    local frame = CreateFrame("Frame", AddOnName .. "ImageView", UIParent, "ONSImageViewTemplate")
+    local frame = CreateFrame("Frame", AddOnName .. "ImageView", UIParent, "ONSRaidToolsTemplate")
     return frame
 end
 
-function ONSImageView:GetViewByName(name)
+function ONSRaidTools:GetViewByName(name)
     if name == VIEWS.IMAGE then
         if not self.imageView then
             self:InitImageView()
@@ -95,7 +95,7 @@ function ONSImageView:GetViewByName(name)
     end
 end
 
-function ONSImageView:SetView(view)
+function ONSRaidTools:SetView(view)
     if not view then return end
     if not self.activeView then return end
     local current = self:GetCurrentView()
@@ -111,7 +111,7 @@ function ONSImageView:SetView(view)
     self.activeView = view.name
 end
 
-function ONSImageView:InitImageView()
+function ONSRaidTools:InitImageView()
     self.imageView = createImageView()
     self.imageView.menuButton:SetScript("OnClick", function(f)
         if not self.selectView then
@@ -129,7 +129,7 @@ local function createSelectView()
     return frame
 end
 
-function ONSImageView:InitSelectView()
+function ONSRaidTools:InitSelectView()
     self.selectView = createSelectView()
     self:AddListernersToView(self.selectView)
     self.selectView.backButton:SetScript("OnClick", function(f)
@@ -138,11 +138,11 @@ function ONSImageView:InitSelectView()
     self.selectView.name = VIEWS.SELECT
 end
 
-function ONSImageView:setupMainWindow()
+function ONSRaidTools:setupMainWindow()
     self.mainWindow = createWindow()
     self:AddMainListeners()
     self:SetInitPosition()
-    ONSImageView:GetViewByName(VIEWS.IMAGE)
+    ONSRaidTools:GetViewByName(VIEWS.IMAGE)
     self.activeView = VIEWS.IMAGE
     self:SetView(self.imageView)
     C_Timer.After(0.1, function()
@@ -150,7 +150,7 @@ function ONSImageView:setupMainWindow()
     end)
 end
 
-function ONSImageView:ToggleFrame()
+function ONSRaidTools:ToggleFrame()
     --Create the window if it doesn't exist
     if not self.mainWindow then
         self:setupMainWindow()
@@ -169,7 +169,7 @@ function ONSImageView:ToggleFrame()
     end
 end
 
-function ONSImageView:MODIFIER_STATE_CHANGED(e, key, state)
+function ONSRaidTools:MODIFIER_STATE_CHANGED(e, key, state)
     if key ~= "LSHIFT" and key ~= "RSHIFT" then return end
 
     if state == 1 and (self.imageView:IsMouseOver(1, 0, 1, 0)) then

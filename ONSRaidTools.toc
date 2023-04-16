@@ -2,14 +2,14 @@
 ## Author: Nerc, Eminos
 ## Version: 0.1a
 ## License: GPLv3
-## Title: ONSImageView
+## Title: ONSRaidTools
 ## Notes: An addon to show images for a boss
-## SavedVariables: ONSImageViewDB
+## SavedVariables: ONSRaidToolsDB
 
 
 embeds.xml
 frames\frames.xml
-ONSImageView.lua
+ONSRaidTools.lua
 mainWindow.lua
 
 images\images.xml

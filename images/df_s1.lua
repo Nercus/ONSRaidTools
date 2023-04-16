@@ -46,21 +46,21 @@ module.bosses = {
 
 module.images = {
     [1] = {
-        "Interface\\Addons\\ONSImageView\\images\\df_s1\\1_1_Boss.png",
-        "Interface\\Addons\\ONSImageView\\images\\df_s1\\1_2_Boss.png",
-        "Interface\\Addons\\ONSImageView\\images\\df_s1\\1_3_Boss.png",
+        "Interface\\Addons\\ONSRaidTools\\images\\df_s1\\1_1_Boss.png",
+        "Interface\\Addons\\ONSRaidTools\\images\\df_s1\\1_2_Boss.png",
+        "Interface\\Addons\\ONSRaidTools\\images\\df_s1\\1_3_Boss.png",
     },
     [3] = {
-        "Interface\\Addons\\ONSImageView\\images\\df_s1\\3_1_Boss.png",
+        "Interface\\Addons\\ONSRaidTools\\images\\df_s1\\3_1_Boss.png",
     },
     [4] = {
-        "Interface\\Addons\\ONSImageView\\images\\df_s1\\4_1_Boss.png",
+        "Interface\\Addons\\ONSRaidTools\\images\\df_s1\\4_1_Boss.png",
     },
     [5] = {
-        "Interface\\Addons\\ONSImageView\\images\\df_s1\\5_1_Boss.png",
+        "Interface\\Addons\\ONSRaidTools\\images\\df_s1\\5_1_Boss.png",
     },
     [7] = {
-        "Interface\\Addons\\ONSImageView\\images\\df_s1\\7_1_Boss.png",
-        "Interface\\Addons\\ONSImageView\\images\\df_s1\\7_2_Boss.png",
+        "Interface\\Addons\\ONSRaidTools\\images\\df_s1\\7_1_Boss.png",
+        "Interface\\Addons\\ONSRaidTools\\images\\df_s1\\7_2_Boss.png",
     }
 }
