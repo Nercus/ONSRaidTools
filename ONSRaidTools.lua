@@ -2,6 +2,8 @@ local AddOnName, _ = ...
 local ONSRaidTools = LibStub("AceAddon-3.0"):NewAddon(AddOnName, "AceEvent-3.0")
 
 
+ONSRaidTools.DEV = false
+
 local LDBIcon = LibStub("LibDBIcon-1.0")
 local defaults = {
     global = {
@@ -33,9 +35,11 @@ local ONSRaidToolsBroker = LibStub("LibDataBroker-1.1"):NewDataObject(AddOnName,
 
 
 function ONSRaidTools:OnEnable()
-    C_Timer.After(1, function()
-        self:ToggleFrame()
-    end)
+    if self.DEV then
+        C_Timer.After(1, function()
+            self:ToggleFrame()
+        end)
+    end
     ONSRaidTools:RegisterEvent("MODIFIER_STATE_CHANGED")
 end
 

@@ -2,6 +2,7 @@ local AddOnName, _ = ...
 local ONSRaidTools = LibStub("AceAddon-3.0"):GetAddon(AddOnName)
 
 
+
 local VIEWS = {
     IMAGE = "image",
     SELECT = "select"
@@ -15,7 +16,7 @@ local function createWindow()
 end
 
 function ONSRaidTools:AddListernersToView(view)
-    if not view then return print("view is nil") end
+    if not view then return error("view is nil") end
     view:SetScript("OnEnter", function(f)
         if IsShiftKeyDown() then
             f:EnableMouse(false)
@@ -103,7 +104,6 @@ function ONSRaidTools:SetView(view)
         current:Hide()
         current:EnableMouse(false)
     end
-    print("SetView", view.name)
     view:SetParent(self.mainWindow)
     view:SetPoint("TOPLEFT", self.mainWindow, "TOPLEFT", 0, 0)
     view:SetPoint("BOTTOMRIGHT", self.mainWindow, "BOTTOMRIGHT", 0, 0)
@@ -145,9 +145,11 @@ function ONSRaidTools:setupMainWindow()
     ONSRaidTools:GetViewByName(VIEWS.IMAGE)
     self.activeView = VIEWS.IMAGE
     self:SetView(self.imageView)
-    C_Timer.After(0.1, function()
-        -- ViragDevTool:AddData(self)
-    end)
+    if self.DEV then
+        C_Timer.After(0.1, function()
+            ViragDevTool:AddData(self)
+        end)
+    end
 end
 
 function ONSRaidTools:ToggleFrame()
@@ -156,8 +158,8 @@ function ONSRaidTools:ToggleFrame()
         self:setupMainWindow()
     end
 
+
     local image = self.modules.DFS1.images[1][3]
-    print(image)
     self.imageView.img:SetTexture(image)
 
 
