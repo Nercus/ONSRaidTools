@@ -1,7 +1,6 @@
 --------------------------------------------------
 -- Dragonflight S2 - Aberrus, The Shadow Crucible
 --------------------------------------------------
-
 local AddOnName, _ = ...
 local core = LibStub("AceAddon-3.0"):GetAddon(AddOnName)
 local module = core:NewModule("DFS2")
@@ -72,47 +71,46 @@ module.images = {
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\3_4_Dracthyr.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\3_5_Dracthyr.png",
     },
-    [4] ={
+    [4] = {
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\4_1_Zaqali.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\4_2_Zaqali.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\4_3_Zaqali.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\4_4_Zaqali.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\4_5_Zaqali.png",
     },
-    [5] ={
+    [5] = {
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\5_1_Rashok.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\5_2_Rashok.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\5_3_Rashok.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\5_4_Rashok.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\5_5_Rashok.png",
     },
-    [6] ={
+    [6] = {
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\6_1_Zskarn.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\6_2_Zskarn.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\6_3_Zskarn.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\6_4_Zskarn.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\6_5_Zskarn.png",
     },
-    [7] ={
+    [7] = {
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\7_1_Magmorax.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\7_2_Magmorax.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\7_3_Magmorax.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\7_4_Magmorax.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\7_5_Magmorax.png",
     },
-    [8] ={
+    [8] = {
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\8_1_Neltharion.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\8_2_Neltharion.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\8_3_Neltharion.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\8_4_Neltharion.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\8_5_Neltharion.png",
     },
-    [9] ={
+    [9] = {
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\9_1_Sarkareth.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\9_2_Sarkareth.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\9_3_Sarkareth.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\9_4_Sarkareth.png",
         "Interface\\Addons\\ONSRaidTools\\images\\df_s2\\9_5_Sarkareth.png",
     },
-
 }
