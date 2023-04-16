@@ -5,8 +5,11 @@
         "param-type-mismatch"
     ],
     "diagnostics.globals": [
+        "GameTooltip",
         "ViragDevTool",
-        "SlashCmdList"
+        "SlashCmdList",
+        "CreateFramePool",
+        "DARKYELLOW_FONT_COLOR"
     ],
     "workspace.ignoreDir": [
         ".vscode",

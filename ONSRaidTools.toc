@@ -7,9 +7,14 @@
 ## SavedVariables: ONSRaidToolsDB
 
 
+# Load frames, libs and components
 embeds.xml
+frames\components\components.xml
 frames\frames.xml
+
+# Load logic
 ONSRaidTools.lua
 mainWindow.lua
 
+# Load images
 images\images.xml

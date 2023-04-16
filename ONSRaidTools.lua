@@ -1,8 +1,10 @@
-local AddOnName, _ = ...
+local AddOnName, components = ...
 local ONSRaidTools = LibStub("AceAddon-3.0"):NewAddon(AddOnName, "AceEvent-3.0")
 
 
-ONSRaidTools.DEV = false
+-- FIXME: don't package that
+ONSRaidTools.DEV = true
+
 
 local LDBIcon = LibStub("LibDBIcon-1.0")
 local defaults = {
@@ -17,9 +19,15 @@ local defaults = {
             minimap = {
                 hide = false
             }
+        },
+        loadedEncounter = {
+            images = {},
+            info = {}
         }
     }
 }
+
+
 
 local ONSRaidToolsBroker = LibStub("LibDataBroker-1.1"):NewDataObject(AddOnName, {
     type = "data source",
@@ -38,6 +46,8 @@ function ONSRaidTools:OnEnable()
     if self.DEV then
         C_Timer.After(1, function()
             self:ToggleFrame()
+
+            ViragDevTool:AddData(components)
         end)
     end
     ONSRaidTools:RegisterEvent("MODIFIER_STATE_CHANGED")

@@ -1,8 +1,9 @@
-local AddOnName, _ = ...
+local AddOnName, components = ...
 local ONSRaidTools = LibStub("AceAddon-3.0"):GetAddon(AddOnName)
 
 
-
+-- FIXME: going from image to select and back image view makes the frame draggable without shift key
+-- FIXME: window is draggable in select view
 local VIEWS = {
     IMAGE = "image",
     SELECT = "select"
@@ -79,6 +80,7 @@ end
 
 local function createImageView()
     local frame = CreateFrame("Frame", AddOnName .. "ImageView", UIParent, "ONSRaidToolsTemplate")
+
     return frame
 end
 
@@ -111,6 +113,80 @@ function ONSRaidTools:SetView(view)
     self.activeView = view.name
 end
 
+function ONSRaidTools:LoadImageToView(img)
+    -- img -> path to image
+    if not img then return end
+    self.imageView.img:SetTexture(img)
+end
+
+function ONSRaidTools:CreateImageViewTabs(tabsTable)
+    if not tabsTable then return end
+    local tabs = components:CreateTabs(tabsTable)
+    components:LayoutTabs(tabs, self.imageView.tabsHolder, 5, 5, 4)
+
+    -- TODO: set first image as default
+end
+
+function ONSRaidTools:LoadCurrentImageCollection()
+    if not self.db.global.loadedEncounter then return end
+    if not self.db.global.loadedEncounter.images then return end
+
+    local images = self.db.global.loadedEncounter.images
+    local tabsTable = {}
+
+    for i, path in ipairs(images) do
+        local tab = {
+            label = "Image " .. i,
+            callback = function()
+                self:LoadImageToView(path)
+            end
+        }
+        table.insert(tabsTable, tab)
+    end
+    self:CreateImageViewTabs(tabsTable)
+end
+
+-- Example: ONSRaidTools:LoadEncounter(1, "dfs1")
+function ONSRaidTools:LoadEncounter(encounterIndex, moduleName)
+    -- encounterIndex -> index of encounter in the raid
+    -- Check if an encounter index is set, if not return
+    if not encounterIndex then
+        error("encounterIndex not found")
+        return
+    end
+    -- Check if a module name is set, if not return
+    if not moduleName then
+        error("moduleName not found")
+        return
+    end
+    -- Set the module to the module with the specified name
+    local module = self.modules[moduleName]
+    -- Check if the module is set, if not return
+    if not module then
+        error("module not found")
+        return
+    end
+    -- Set the images to the images for the specified encounterIndex
+    local images = module.images[encounterIndex]
+    -- Check if the images are set, if not return
+    if not images then
+        error("images not found")
+        return
+    end
+    -- Set the info to the info for the specified encounterIndex
+    local info = module.bosses[encounterIndex]
+    -- Check if the info is set, if not return
+    if not info then
+        error("info not found")
+        return
+    end
+    -- Set the loadedEncounter images to the images
+    self.db.global.loadedEncounter.images = images
+    -- Set the loadedEncounter info to the info
+    self.db.global.loadedEncounter.info = info
+    self:LoadCurrentImageCollection()
+end
+
 function ONSRaidTools:InitImageView()
     self.imageView = createImageView()
     self.imageView.menuButton:SetScript("OnClick", function(f)
@@ -119,6 +195,15 @@ function ONSRaidTools:InitImageView()
         end
         self:SetView(self.selectView)
     end)
+
+    -- TODO: hide/show tabs on mouse enter/leave
+    -- self.imageView:SetScript("OnEnter", function(f)
+    --     f.tabsHolder:Show()
+    -- end)
+
+    -- self.imageView:SetScript("OnLeave", function(f)
+    --     f.tabsHolder:Hide()
+    -- end)
 
     self.imageView.name = VIEWS.IMAGE
     self:AddListernersToView(self.imageView)
@@ -148,6 +233,7 @@ function ONSRaidTools:setupMainWindow()
     if self.DEV then
         C_Timer.After(0.1, function()
             ViragDevTool:AddData(self)
+            self:LoadEncounter(1, "DFS1")
         end)
     end
 end
@@ -157,11 +243,6 @@ function ONSRaidTools:ToggleFrame()
     if not self.mainWindow then
         self:setupMainWindow()
     end
-
-
-    local image = self.modules.DFS1.images[1][3]
-    self.imageView.img:SetTexture(image)
-
 
     --Show or hide the window depending on its current state
     if self.mainWindow:IsShown() then
