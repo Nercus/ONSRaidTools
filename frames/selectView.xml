@@ -13,15 +13,23 @@
                         <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" />
                     </Anchors>
                 </Texture>
-                <FontString name="$parentSelectView" inherits="GameFontNormal" justifyH="CENTER" text="Select View">
-                    <Size x="300" y="0" />
+                <FontString parentKey="title" inherits="GameFontNormalHuge" justifyH="CENTER" text="Select View">
+                    <Size x="300" y="30" />
                     <Anchors>
-                        <Anchor point="CENTER" />
+                        <Anchor point="TOPLEFT" relativePoint="TOPLEFT" y="-2" />
+                        <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" y="-2" />
                     </Anchors>
                 </FontString>
             </Layer>
         </Layers>
         <Frames>
+            <Frame parentKey="encounterButtonHolder">
+                <Size x="1" y="1"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativePoint="TOPLEFT" y="-35" x="6"/>
+                    <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" y="40" x="-6"/>
+                </Anchors>
+            </Frame>
             <Button parentKey="backButton" frameLevel="800" text="BACK">
                 <ButtonText name="Back" inherits="GameFontHighlight">
                 </ButtonText>

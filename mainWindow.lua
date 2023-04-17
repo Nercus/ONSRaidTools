@@ -1,13 +1,14 @@
 local AddOnName, components = ...
 local ONSRaidTools = LibStub("AceAddon-3.0"):GetAddon(AddOnName)
 
+-- TODO: Add recipe module
 
--- FIXME: going from image to select and back image view makes the frame draggable without shift key
--- FIXME: window is draggable in select view
 local VIEWS = {
     IMAGE = "image",
     SELECT = "select"
 }
+
+local activeRaid = "DFS2"
 local moveCrosshair = "Interface/CURSOR/UI-Cursor-Move.crosshair"
 local function createWindow()
     -- Create the frame
@@ -80,7 +81,6 @@ end
 
 local function createImageView()
     local frame = CreateFrame("Frame", AddOnName .. "ImageView", UIParent, "ONSRaidToolsTemplate")
-
     return frame
 end
 
@@ -104,7 +104,6 @@ function ONSRaidTools:SetView(view)
     local current = self:GetCurrentView()
     if current then
         current:Hide()
-        current:EnableMouse(false)
     end
     view:SetParent(self.mainWindow)
     view:SetPoint("TOPLEFT", self.mainWindow, "TOPLEFT", 0, 0)
@@ -123,8 +122,9 @@ function ONSRaidTools:CreateImageViewTabs(tabsTable)
     if not tabsTable then return end
     local tabs = components:CreateTabs(tabsTable)
     components:LayoutTabs(tabs, self.imageView.tabsHolder, 5, 5, 4)
-
-    -- TODO: set first image as default
+    -- Set the first tab as active
+    tabsTable[1].callback()
+    components:SetActiveTab(tabs, 1)
 end
 
 function ONSRaidTools:LoadCurrentImageCollection()
@@ -214,12 +214,60 @@ local function createSelectView()
     return frame
 end
 
+
+
+
+
 function ONSRaidTools:InitSelectView()
     self.selectView = createSelectView()
     self:AddListernersToView(self.selectView)
     self.selectView.backButton:SetScript("OnClick", function(f)
         self:SetView(self.imageView)
     end)
+
+    -- only for hardcoded raid
+    -- Set the module to the module with the specified name
+    local module = self.modules[activeRaid]
+    -- Check if the module is set, if not return
+    if not module then
+        error("module not found")
+        return
+    end
+    local gap = 5
+    local row = 0
+
+
+    -- TODO: set dynamic button height ?????
+    -- TODO: set dynamic width for last button when number of encounters is odd
+    local buttonIndex = 1
+    for bossIndex, bossInfo in ipairs(module.bosses) do
+        if module.images[bossIndex] then
+            local button = CreateFrame("Button", nil, self.selectView.encounterButtonHolder,
+                "ONSRaidToolsEncounterButtonTemplate")
+            local width = button:GetWidth()
+            local height = button:GetHeight()
+            local col = (buttonIndex % 2 == 0 and 2 or 1)
+            if col == 1 then
+                row = row + 1
+            end
+
+            local xOffset = (col - 1) * (width + gap)
+            local yOffset = -((row - 1) * (height + gap))
+
+            button:SetPoint("TOPLEFT", self.selectView.encounterButtonHolder, "TOPLEFT", xOffset, yOffset)
+            button.icon:SetTexture(bossInfo.icon)
+            button.label:SetText(bossInfo.name)
+            button:SetScript("OnClick", function(f)
+                self:LoadEncounter(bossIndex, activeRaid)
+                self:SetView(self.imageView)
+            end)
+            button:Show()
+            buttonIndex = buttonIndex + 1
+        end
+    end
+
+
+
     self.selectView.name = VIEWS.SELECT
 end
 
@@ -233,7 +281,7 @@ function ONSRaidTools:setupMainWindow()
     if self.DEV then
         C_Timer.After(0.1, function()
             ViragDevTool:AddData(self)
-            self:LoadEncounter(1, "DFS1")
+            self:LoadEncounter(1, "DFS2")
         end)
     end
 end
@@ -255,11 +303,21 @@ end
 function ONSRaidTools:MODIFIER_STATE_CHANGED(e, key, state)
     if key ~= "LSHIFT" and key ~= "RSHIFT" then return end
 
+    if not self.imageView then return end
     if state == 1 and (self.imageView:IsMouseOver(1, 0, 1, 0)) then
         self.imageView:EnableMouse(false)
         self.imageView:SetAlpha(0.1)
     else
         self.imageView:EnableMouse(true)
         self.imageView:SetAlpha(1)
+    end
+
+    if not self.selectView then return end
+    if state == 1 and (self.selectView:IsMouseOver(1, 0, 1, 0)) then
+        self.selectView:EnableMouse(false)
+        self.selectView:SetAlpha(0.1)
+    else
+        self.selectView:EnableMouse(true)
+        self.selectView:SetAlpha(1)
     end
 end

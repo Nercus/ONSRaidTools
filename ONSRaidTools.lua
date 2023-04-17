@@ -3,7 +3,7 @@ local ONSRaidTools = LibStub("AceAddon-3.0"):NewAddon(AddOnName, "AceEvent-3.0")
 
 
 -- FIXME: don't package that
-ONSRaidTools.DEV = true
+ONSRaidTools.DEV = false
 
 
 local LDBIcon = LibStub("LibDBIcon-1.0")
@@ -46,7 +46,6 @@ function ONSRaidTools:OnEnable()
     if self.DEV then
         C_Timer.After(1, function()
             self:ToggleFrame()
-
             ViragDevTool:AddData(components)
         end)
     end
