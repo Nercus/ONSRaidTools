@@ -17,13 +17,29 @@ local function createWindow()
     return frame
 end
 
+
+--TODO: check what is causing the frame to stutter when moused over in certain areas
 function ONSRaidTools:AddListernersToView(view)
     if not view then return error("view is nil") end
     view:SetScript("OnEnter", function(f)
         if IsShiftKeyDown() then
             f:EnableMouse(false)
             f:SetAlpha(0.1)
+            
         end
+
+            self.imageView.tabsHolder:Show()
+            end)
+            view:SetScript("OnLeave", function(f)
+                local view = self:GetCurrentView()
+                if view then
+                    view:EnableMouse(true)
+                    view:SetAlpha(1)
+               end
+                
+                if not self.imageView.tabsHolder:IsMouseOver() then
+                    self.imageView.tabsHolder:Hide()
+                end
     end)
 end
 
@@ -81,7 +97,7 @@ end
 
 local function createImageView()
     local frame = CreateFrame("Frame", AddOnName .. "ImageView", UIParent, "ONSRaidToolsTemplate")
-    return frame
+     return frame
 end
 
 function ONSRaidTools:GetViewByName(name)
