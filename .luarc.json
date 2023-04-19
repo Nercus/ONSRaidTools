@@ -2,7 +2,9 @@
     "Lua.diagnostics.disable": [
         "undefined-field",
         "deprecated",
-        "param-type-mismatch"
+        "param-type-mismatch",
+        "duplicate-set-field",
+        "missing-parameter"
     ],
     "diagnostics.globals": [
         "GameTooltip",
