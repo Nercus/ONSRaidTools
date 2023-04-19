@@ -30,7 +30,7 @@
             </Layer>
         </Layers>
         <Frames>
-            <Button parentKey="menuButton" frameLevel="800">
+            <Button parentKey="menuButton" frameLevel="800" hidden="true">
                 <Size x="30" y="30" />
                 <Anchors>
                     <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="2" y="-2" />
@@ -39,7 +39,7 @@
                 <HighlightTexture atlas="Gamepad_Ltr_Menu_32" alpha="0.8"/>
                 <PushedTexture atlas="Gamepad_Ltr_Menu_32" alpha="1"/>
             </Button>
-            <Frame parentKey="tabsHolder">
+            <Frame parentKey="tabsHolder" hidden="true">
                 <Size x="1" y="20" />
                 <Anchors>
                     <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" x="2" y="2" />

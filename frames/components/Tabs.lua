@@ -57,6 +57,7 @@ function components:LayoutTabs(tabs, parentFrame, gap, paddingX, paddingBottom)
         tab:SetWidth(tabWidth)
         tab:Show()
     end
+    parentFrame.tabs = tabs
 end
 
 function components:KillTabs()

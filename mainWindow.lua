@@ -17,29 +17,46 @@ local function createWindow()
     return frame
 end
 
+-- FIXME: after shift dragging frame -> show/hide of elements is broken
+-- capsulate functions for is over view by check all child elements aswell
 
---TODO: check what is causing the frame to stutter when moused over in certain areas
+
+-- TODO: Add square menu button
+
+
 function ONSRaidTools:AddListernersToView(view)
     if not view then return error("view is nil") end
     view:SetScript("OnEnter", function(f)
         if IsShiftKeyDown() then
             f:EnableMouse(false)
             f:SetAlpha(0.1)
-            
         end
 
-            self.imageView.tabsHolder:Show()
-            end)
-            view:SetScript("OnLeave", function(f)
-                local view = self:GetCurrentView()
-                if view then
-                    view:EnableMouse(true)
-                    view:SetAlpha(1)
-               end
-                
-                if not self.imageView.tabsHolder:IsMouseOver() then
-                    self.imageView.tabsHolder:Hide()
-                end
+        self.imageView.tabsHolder:Show()
+        self.imageView.menuButton:Show()
+    end)
+    view:SetScript("OnLeave", function(f)
+        local v = self:GetCurrentView()
+        if v then
+            v:EnableMouse(true)
+            v:SetAlpha(1)
+        end
+        local isOverTab = false
+        for i, j in ipairs(self.imageView.tabsHolder.tabs) do
+            if j:IsMouseOver() or isOverTab then
+                isOverTab = true
+                break
+            end
+        end
+        local hideTabsHolder = not self.imageView.tabsHolder:IsMouseOver() and not isOverTab and
+            not self.imageView.menuButton:IsMouseOver()
+        if hideTabsHolder then
+            self.imageView.tabsHolder:Hide()
+        end
+
+        if not self.imageView.menuButton:IsMouseOver() and not isOverTab and self.imageView.menuButton:IsShown() then
+            self.imageView.menuButton:Hide()
+        end
     end)
 end
 
@@ -97,7 +114,7 @@ end
 
 local function createImageView()
     local frame = CreateFrame("Frame", AddOnName .. "ImageView", UIParent, "ONSRaidToolsTemplate")
-     return frame
+    return frame
 end
 
 function ONSRaidTools:GetViewByName(name)
@@ -212,14 +229,12 @@ function ONSRaidTools:InitImageView()
         self:SetView(self.selectView)
     end)
 
-    -- TODO: hide/show tabs on mouse enter/leave
-    -- self.imageView:SetScript("OnEnter", function(f)
-    --     f.tabsHolder:Show()
-    -- end)
 
-    -- self.imageView:SetScript("OnLeave", function(f)
-    --     f.tabsHolder:Hide()
-    -- end)
+
+    if self.imageView:IsMouseOver() then
+        self.imageView.menuButton:Show()
+        self.imageView.tabsHolder:Show()
+    end
 
     self.imageView.name = VIEWS.IMAGE
     self:AddListernersToView(self.imageView)

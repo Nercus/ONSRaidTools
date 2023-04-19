@@ -3,7 +3,7 @@ local ONSRaidTools = LibStub("AceAddon-3.0"):NewAddon(AddOnName, "AceEvent-3.0")
 
 
 -- FIXME: don't package that
-ONSRaidTools.DEV = false
+ONSRaidTools.DEV = true
 
 
 local LDBIcon = LibStub("LibDBIcon-1.0")
@@ -79,7 +79,7 @@ SLASH_ONS1 = "/ons"
 
 SlashCmdList["ONS"] = function(msg)
     if msg == "settings" or msg == "config" then
-        -- TODO: Add options
+        -- TODO: Add settings
     elseif msg == "minimap" then
         ONSRaidTools:ToggleMinimapButton()
     else
