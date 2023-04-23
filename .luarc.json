@@ -11,7 +11,9 @@
         "ViragDevTool",
         "SlashCmdList",
         "CreateFramePool",
-        "DARKYELLOW_FONT_COLOR"
+        "DARKYELLOW_FONT_COLOR",
+        "InterfaceOptionsFrame",
+        "InterfaceOptionsFrame_OpenToCategory"
     ],
     "workspace.ignoreDir": [
         ".vscode",
