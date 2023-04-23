@@ -2,6 +2,8 @@ local AddOnName, components = ...
 local ONSRaidTools = LibStub("AceAddon-3.0"):GetAddon(AddOnName)
 
 -- TODO: Add recipe module
+-- TODO: Add square menu button
+
 
 local VIEWS = {
     IMAGE = "image",
@@ -17,11 +19,6 @@ local function createWindow()
     return frame
 end
 
--- FIXME: after shift dragging frame -> show/hide of elements is broken
--- capsulate functions for is over view by check all child elements aswell
-
-
--- TODO: Add square menu button
 
 
 function ONSRaidTools:AddListernersToView(view)
@@ -30,15 +27,17 @@ function ONSRaidTools:AddListernersToView(view)
         if IsShiftKeyDown() then
             f:EnableMouse(false)
             f:SetAlpha(0.1)
+            self.imageView.tabsHolder:Hide()
+            self.imageView.menuButton:Hide()
+            return
         end
-
         self.imageView.tabsHolder:Show()
         self.imageView.menuButton:Show()
     end)
     view:SetScript("OnLeave", function(f)
         local v = self:GetCurrentView()
         if v then
-            v:EnableMouse(true)
+            -- v:EnableMouse(true)
             v:SetAlpha(1)
         end
         local isOverTab = false
@@ -78,7 +77,7 @@ function ONSRaidTools:AddMainListeners()
         SetCursor(nil)
         -- Get the position of the frame
         local point, _, relativePoint, xOfs, yOfs = f:GetPoint()
-
+        print("B", point, relativePoint, xOfs, yOfs)
         -- If we found a point then save that position
         if point and relativePoint and xOfs and xOfs then
             self.db.global.position = {
@@ -93,7 +92,7 @@ function ONSRaidTools:AddMainListeners()
     frame:SetScript("OnLeave", function(f)
         local view = self:GetCurrentView()
         if view then
-            view:EnableMouse(true)
+            -- view:EnableMouse(true)
             view:SetAlpha(1)
         end
     end)
@@ -256,6 +255,10 @@ function ONSRaidTools:InitSelectView()
         self:SetView(self.imageView)
     end)
 
+    self.selectView.settingsButton:SetScript("OnClick", function(f)
+        self:OpenSettings()
+    end)
+
     -- only for hardcoded raid
     -- Set the module to the module with the specified name
     local module = self.modules[activeRaid]
@@ -315,6 +318,7 @@ function ONSRaidTools:setupMainWindow()
             self:LoadEncounter(1, "DFS2")
         end)
     end
+    self:LoadOptionsValues()
 end
 
 function ONSRaidTools:ToggleFrame()
@@ -333,21 +337,28 @@ end
 
 function ONSRaidTools:MODIFIER_STATE_CHANGED(e, key, state)
     if key ~= "LSHIFT" and key ~= "RSHIFT" then return end
-
     if not self.imageView then return end
     if state == 1 and (self.imageView:IsMouseOver(1, 0, 1, 0)) then
+        self.mainWindow.moveInfo:Show()
         self.imageView:EnableMouse(false)
         self.imageView:SetAlpha(0.1)
     else
+        self.mainWindow.moveInfo:Hide()
         self.imageView:EnableMouse(true)
         self.imageView:SetAlpha(1)
+        if (self.imageView:IsMouseOver(1, 0, 1, 0)) then
+            self.imageView.tabsHolder:Show()
+            self.imageView.menuButton:Show()
+        end
     end
 
     if not self.selectView then return end
     if state == 1 and (self.selectView:IsMouseOver(1, 0, 1, 0)) then
+        self.mainWindow.moveInfo:Show()
         self.selectView:EnableMouse(false)
         self.selectView:SetAlpha(0.1)
     else
+        self.mainWindow.moveInfo:Hide()
         self.selectView:EnableMouse(true)
         self.selectView:SetAlpha(1)
     end

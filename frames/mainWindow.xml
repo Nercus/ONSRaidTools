@@ -12,7 +12,7 @@
                         <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" />
                     </Anchors>
                 </Texture>
-                <FontString name="$parentMoveInfo" parentKey="moveInfo" inherits="GameFontNormal" justifyH="CENTER" text="Drag to move the window!">
+                <FontString name="$parentMoveInfo" parentKey="moveInfo" inherits="GameFontNormal" justifyH="CENTER" text="Drag to move the window!" hidden="true">
                     <Size x="300" y="0" />
                     <Anchors>
                         <Anchor point="CENTER" />
