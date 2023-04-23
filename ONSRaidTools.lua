@@ -35,7 +35,7 @@ local defaults = {
 
 local ONSRaidToolsBroker = LibStub("LibDataBroker-1.1"):NewDataObject(AddOnName, {
     type = "data source",
-    icon = "Interface\\Addons\\ONSRaidTools\\assets\\ons_icon",
+    icon = "Interface\\Addons\\ONSRaidTools\\assets\\onsIcon",
     OnClick = function(self, button)
         ONSRaidTools:ToggleFrame()
     end,

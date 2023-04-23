@@ -3,4 +3,5 @@
 ..\FrameXML\UI.xsd">
     <Include file="Tab.xml"/>
     <Script file="Tabs.lua"/>
+    <Include file="Button.xml"/>
 </Ui>

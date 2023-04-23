@@ -1,8 +1,10 @@
 local AddOnName, components = ...
 local ONSRaidTools = LibStub("AceAddon-3.0"):GetAddon(AddOnName)
 
+-- FIXME: changing the scale changes the position of the frame after reload https://discord.com/channels/327414731654692866/327533449164488706/600207826559696916
+-- TODO: add custom tooltips to the tabs
+-- TODO: raidleader slash cmd and global api to force open an image on all raid members
 -- TODO: Add recipe module
--- TODO: Add square menu button
 
 
 local VIEWS = {
@@ -10,7 +12,7 @@ local VIEWS = {
     SELECT = "select"
 }
 
-local activeRaid = "DFS2"
+local activeRaid = "DFS1"
 local moveCrosshair = "Interface/CURSOR/UI-Cursor-Move.crosshair"
 local function createWindow()
     -- Create the frame
@@ -20,6 +22,46 @@ local function createWindow()
 end
 
 
+function ONSRaidTools:HideImageViewButtons()
+    if not self.imageView then return end
+    self.imageView.tabsHolder:Hide()
+    self.imageView.menuButton:Hide()
+end
+
+function ONSRaidTools:ShowImageViewButtons()
+    if not self.imageView then return end
+    self.imageView.tabsHolder:Show()
+    self.imageView.menuButton:Show()
+end
+
+local function CheckFrameMouseover(f)
+    if not f then return end
+    if f:IsMouseOver() then
+        return true
+    end
+    local children = { f:GetChildren() }
+    while #children > 0 do
+        local child = table.remove(children, 1)
+        if child:IsMouseOver() then
+            return true
+        end
+        local subChildren = { child:GetChildren() }
+        for i = 1, #subChildren do
+            table.insert(children, subChildren[i])
+        end
+    end
+    return false
+end
+
+
+function ONSRaidTools:UpdateImageViewMouseOverState()
+    if not self.imageView then return end
+    if CheckFrameMouseover(self.imageView) then
+        self:ShowImageViewButtons()
+    else
+        self:HideImageViewButtons()
+    end
+end
 
 function ONSRaidTools:AddListernersToView(view)
     if not view then return error("view is nil") end
@@ -27,34 +69,19 @@ function ONSRaidTools:AddListernersToView(view)
         if IsShiftKeyDown() then
             f:EnableMouse(false)
             f:SetAlpha(0.1)
-            self.imageView.tabsHolder:Hide()
-            self.imageView.menuButton:Hide()
             return
         end
-        self.imageView.tabsHolder:Show()
-        self.imageView.menuButton:Show()
+        if view.name == VIEWS.IMAGE then
+            self:UpdateImageViewMouseOverState()
+        end
     end)
     view:SetScript("OnLeave", function(f)
         local v = self:GetCurrentView()
         if v then
-            -- v:EnableMouse(true)
             v:SetAlpha(1)
         end
-        local isOverTab = false
-        for i, j in ipairs(self.imageView.tabsHolder.tabs) do
-            if j:IsMouseOver() or isOverTab then
-                isOverTab = true
-                break
-            end
-        end
-        local hideTabsHolder = not self.imageView.tabsHolder:IsMouseOver() and not isOverTab and
-            not self.imageView.menuButton:IsMouseOver()
-        if hideTabsHolder then
-            self.imageView.tabsHolder:Hide()
-        end
-
-        if not self.imageView.menuButton:IsMouseOver() and not isOverTab and self.imageView.menuButton:IsShown() then
-            self.imageView.menuButton:Hide()
+        if view.name == VIEWS.IMAGE then
+            self:UpdateImageViewMouseOverState()
         end
     end)
 end
@@ -171,6 +198,9 @@ function ONSRaidTools:LoadCurrentImageCollection()
             label = "Image " .. i,
             callback = function()
                 self:LoadImageToView(path)
+            end,
+            onLeave = function()
+                self:UpdateImageViewMouseOverState()
             end
         }
         table.insert(tabsTable, tab)
@@ -181,40 +211,30 @@ end
 -- Example: ONSRaidTools:LoadEncounter(1, "dfs1")
 function ONSRaidTools:LoadEncounter(encounterIndex, moduleName)
     -- encounterIndex -> index of encounter in the raid
-    -- Check if an encounter index is set, if not return
     if not encounterIndex then
         error("encounterIndex not found")
         return
     end
-    -- Check if a module name is set, if not return
     if not moduleName then
         error("moduleName not found")
         return
     end
-    -- Set the module to the module with the specified name
     local module = self.modules[moduleName]
-    -- Check if the module is set, if not return
     if not module then
         error("module not found")
         return
     end
-    -- Set the images to the images for the specified encounterIndex
     local images = module.images[encounterIndex]
-    -- Check if the images are set, if not return
     if not images then
         error("images not found")
         return
     end
-    -- Set the info to the info for the specified encounterIndex
     local info = module.bosses[encounterIndex]
-    -- Check if the info is set, if not return
     if not info then
         error("info not found")
         return
     end
-    -- Set the loadedEncounter images to the images
     self.db.global.loadedEncounter.images = images
-    -- Set the loadedEncounter info to the info
     self.db.global.loadedEncounter.info = info
     self:LoadCurrentImageCollection()
 end
@@ -229,11 +249,14 @@ function ONSRaidTools:InitImageView()
     end)
 
 
+    self.imageView.menuButton:SetScript("OnLeave", function(f)
+        self:UpdateImageViewMouseOverState()
+    end)
 
-    if self.imageView:IsMouseOver() then
-        self.imageView.menuButton:Show()
-        self.imageView.tabsHolder:Show()
-    end
+    self.imageView.tabsHolder:SetScript("OnLeave", function(f)
+        self:UpdateImageViewMouseOverState()
+    end)
+
 
     self.imageView.name = VIEWS.IMAGE
     self:AddListernersToView(self.imageView)
@@ -251,11 +274,11 @@ end
 function ONSRaidTools:InitSelectView()
     self.selectView = createSelectView()
     self:AddListernersToView(self.selectView)
-    self.selectView.backButton:SetScript("OnClick", function(f)
+    self.selectView.titleBar.backButton:SetScript("OnClick", function(f)
         self:SetView(self.imageView)
     end)
 
-    self.selectView.settingsButton:SetScript("OnClick", function(f)
+    self.selectView.titleBar.settingsButton:SetScript("OnClick", function(f)
         self:OpenSettings()
     end)
 
@@ -271,8 +294,7 @@ function ONSRaidTools:InitSelectView()
     local row = 0
 
 
-    -- TODO: set dynamic button height ?????
-    -- TODO: set dynamic width for last button when number of encounters is odd
+
     local buttonIndex = 1
     for bossIndex, bossInfo in ipairs(module.bosses) do
         if module.images[bossIndex] then

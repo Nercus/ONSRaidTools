@@ -21,7 +21,7 @@ end
 
 function ONSRaidToolsTab:SetActive()
     self:SetAlpha(1)
-    self.bg:SetBackdropBorderColor(DARKYELLOW_FONT_COLOR.r, DARKYELLOW_FONT_COLOR.g, DARKYELLOW_FONT_COLOR.b, 1)
+    self.bg:SetBackdropBorderColor(0.8, 0.8, 0.8, 1)
 end
 
 function ONSRaidToolsTab:SetInactive()

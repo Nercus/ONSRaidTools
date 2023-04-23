@@ -13,46 +13,92 @@
                         <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" />
                     </Anchors>
                 </Texture>
-                <FontString parentKey="title" inherits="GameFontNormalHuge" justifyH="CENTER" text="Select View">
-                    <Size x="300" y="30" />
-                    <Anchors>
-                        <Anchor point="TOPLEFT" relativePoint="TOPLEFT" y="-2" />
-                        <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" y="-2" />
-                    </Anchors>
-                </FontString>
             </Layer>
         </Layers>
         <Frames>
+            <Frame parentKey="titleBar">
+                <Size x="1" y="40"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativePoint="TOPLEFT" />
+                    <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" />
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture atlas="auctionhouse-background-buy-noncommodities-header">
+                            <!-- <Color r="0" g="0" b="0" a="0.5"/> -->
+                        </Texture>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <FontString parentKey="title" inherits="GameFontNormalHuge" justifyH="CENTER" text="Select View">
+                            <Size x="1" y="40" />
+                            <Anchors>
+                                <Anchor point="LEFT" relativePoint="LEFT" relativeKey="$parent.backButton" />
+                                <Anchor point="RIGHT" relativePoint="RIGHT" relativeKey="$parent.settingsButton" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <Button parentKey="backButton" frameLevel="800" inherits="ONSRaidToolsButtonTemplate">
+                        <Size x="34" y="34"/>
+                        <Anchors>
+                            <Anchor point="LEFT" relativePoint="LEFT" x="4" />
+                        </Anchors>
+                        <Layers>
+                            <Layer level="ARTORK">
+                                <Texture file="Interface\Addons\ONSRaidTools\assets\backIcon">
+                                    <Anchors>
+                                        <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="6" y="-6" />
+                                        <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-6" y="6" />
+                                    </Anchors>
+                                </Texture>
+                            </Layer>
+                            <Layer level="HIGHLIGHT">
+                                <Texture file="Interface\Addons\ONSRaidTools\assets\backIcon">
+                                    <Color r="1" g="0.82" b="0" a="0.7"/>
+                                    <Anchors>
+                                        <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="6" y="-6" />
+                                        <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-6" y="6" />
+                                    </Anchors>
+                                </Texture>
+                            </Layer>
+                        </Layers>
+                    </Button>
+
+                    <Button parentKey="settingsButton" frameLevel="800" inherits="ONSRaidToolsButtonTemplate">
+                        <Size x="34" y="34"/>
+                        <Anchors>
+                            <Anchor point="RIGHT" relativePoint="RIGHT" x="-4" />
+                        </Anchors>
+                        <Layers>
+                            <Layer level="ARTORK">
+                                <Texture file="Interface\Addons\ONSRaidTools\assets\settingsIcon">
+                                    <Anchors>
+                                        <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="6" y="-6" />
+                                        <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-6" y="6" />
+                                    </Anchors>
+                                </Texture>
+                            </Layer>
+                            <Layer level="HIGHLIGHT">
+                                <Texture file="Interface\Addons\ONSRaidTools\assets\settingsIcon">
+                                    <Color r="1" g="0.82" b="0" a="0.7"/>
+                                    <Anchors>
+                                        <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="6" y="-6" />
+                                        <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-6" y="6" />
+                                    </Anchors>
+                                </Texture>
+                            </Layer>
+                        </Layers>
+                    </Button>
+                </Frames>
+            </Frame>
             <Frame parentKey="encounterButtonHolder">
                 <Size x="1" y="1"/>
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativePoint="TOPLEFT" y="-35" x="6"/>
-                    <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" y="40" x="-6"/>
+                    <Anchor point="TOPLEFT" relativePoint="TOPLEFT" y="-46" x="6"/>
+                    <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" y="6" x="-6"/>
                 </Anchors>
             </Frame>
-            <Button parentKey="backButton" frameLevel="800" text="BACK">
-                <ButtonText name="Back" inherits="GameFontHighlight">
-                </ButtonText>
-                <Size x="140" y="30"/>
-                <Anchors>
-                    <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" x="6" y="6"/>
-                </Anchors>
-                <NormalTexture atlas="UI-CharacterCreate-LargeButton" alpha="0.6"/>
-                <HighlightTexture atlas="UI-CharacterCreate-LargeButton" alpha="0.8"/>
-                <PushedTexture atlas="UI-CharacterCreate-LargeButton" alpha="1"/>
-            </Button>
-
-            <Button parentKey="settingsButton" frameLevel="800" text="SETTINGS">
-                <ButtonText name="Settings" inherits="GameFontHighlight">
-                </ButtonText>
-                <Size x="140" y="30"/>
-                <Anchors>
-                    <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-6" y="6"/>
-                </Anchors>
-                <NormalTexture atlas="UI-CharacterCreate-LargeButton" alpha="0.6"/>
-                <HighlightTexture atlas="UI-CharacterCreate-LargeButton" alpha="0.8"/>
-                <PushedTexture atlas="UI-CharacterCreate-LargeButton" alpha="1"/>
-            </Button>
         </Frames>
     </Frame>
 </Ui>

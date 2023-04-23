@@ -30,14 +30,30 @@
             </Layer>
         </Layers>
         <Frames>
-            <Button parentKey="menuButton" frameLevel="800" hidden="true">
+            <Button parentKey="menuButton" frameLevel="800" inherits="ONSRaidToolsButtonTemplate" hidden="true">
                 <Size x="30" y="30" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="2" y="-2" />
+                    <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="7" y="-7" />
                 </Anchors>
-                <NormalTexture atlas="Gamepad_Ltr_Menu_32" alpha="0.6"/>
-                <HighlightTexture atlas="Gamepad_Ltr_Menu_32" alpha="0.8"/>
-                <PushedTexture atlas="Gamepad_Ltr_Menu_32" alpha="1"/>
+                <Layers>
+                    <Layer level="ARTORK">
+                        <Texture file="Interface\Addons\ONSRaidTools\assets\menuicon">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="6" y="-6" />
+                                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-6" y="6" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="HIGHLIGHT">
+                        <Texture file="Interface\Addons\ONSRaidTools\assets\menuicon">
+                            <Color r="1" g="0.82" b="0" a="0.7"/>
+                            <Anchors>
+                                <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="6" y="-6" />
+                                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-6" y="6" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
             </Button>
             <Frame parentKey="tabsHolder" hidden="true">
                 <Size x="1" y="20" />

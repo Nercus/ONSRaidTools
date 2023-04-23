@@ -7,6 +7,7 @@ local AddOnName, components = ...
 --     {
 --         label = "Tab 2",
 --         callback = function() print("Tab 2") end
+--           onLeave = function() print("Tab 2 onLeave") end
 --     }
 -- }
 local tabsFramePool = CreateFramePool("Button", nil, "ONSRaidToolsTabTemplate")
@@ -28,7 +29,7 @@ function components:CreateTabs(tabsInfo)
     self:KillTabs() -- We only want one set of tabs at a time
     for i, tabInfo in ipairs(tabsInfo) do
         local tab = tabsFramePool:Acquire()
-        tab.text:SetText(tabInfo.label)
+        tab.text:SetText(i)
         tab:SetScript("OnClick", function()
             self:SetActiveTab(frames, i)
             tabInfo.callback()
@@ -39,9 +40,9 @@ function components:CreateTabs(tabsInfo)
             GameTooltip:SetText(tabInfo.label)
             GameTooltip:Show()
         end)
-
         tab:SetScript("OnLeave", function(f)
             GameTooltip:Hide()
+            tabInfo.onLeave()
         end)
         table.insert(frames, tab)
     end

@@ -6,8 +6,9 @@
         <Size x="1" y="20"/>
         <Layers>
             <Layer level="DIALOG">
-                <FontString parentKey="text" inherits="GameFontNormalSmall" justifyH="CENTER" justifyV="MIDDLE">
+                <FontString parentKey="text" inherits="GameFontHighlightSmall" justifyH="CENTER" justifyV="MIDDLE">
                     <Size x="1" />
+                    <Color r="0.8" g="0.8" b="0.8" />
                     <Anchors>
                         <Anchor point="LEFT" relativePoint="LEFT" x="2" />
                         <Anchor point="RIGHT" relativePoint="RIGHT" x="-2"/>
