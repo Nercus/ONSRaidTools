@@ -8,6 +8,8 @@ local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 ONSRaidTools.DEV = true
 
 
+ONSRaidTools.activeRaid = "DFS1"
+
 local LDBIcon = LibStub("LibDBIcon-1.0")
 local defaults = {
     global = {
@@ -55,12 +57,14 @@ local ONSOptionsTable = {
     args = {
         description = {
             name = "ONSRaidTools is a tool to help you with your raiding experience.",
+            width = "full",
             type = "description",
             order = 0
         },
         -- toggle minimap button
         minimap = {
             name = "Minimap Button",
+            width = "full",
             type = "toggle",
             get = function()
                 return not ONSRaidTools.db.global.options.minimap.hide
@@ -73,6 +77,7 @@ local ONSOptionsTable = {
         -- opacity slider -> range
         opacity = {
             name = "Opacity",
+            width = "full",
             type = "range",
             min = 0.3,
             max = 1,
@@ -88,6 +93,7 @@ local ONSOptionsTable = {
         -- scale slider -> range
         scale = {
             name = "Scale",
+            width = "full",
             type = "range",
             min = 0.5,
             max = 2,
@@ -136,8 +142,10 @@ function ONSRaidTools:OnEnable()
         end)
     end
     ONSRaidTools:RegisterEvent("MODIFIER_STATE_CHANGED")
+    ONSRaidTools:RegisterEvent("CHAT_MSG_ADDON")
     AceConfig:RegisterOptionsTable(AddOnName, ONSOptionsTable)
     self.optionsFrame = AceConfigDialog:AddToBlizOptions(AddOnName, AddOnName)
+    C_ChatInfo.RegisterAddonMessagePrefix(AddOnName)
 end
 
 function ONSRaidTools:OnInitialize()
@@ -170,11 +178,71 @@ function ONSRaidTools:OpenSettings()
     InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
 end
 
+function ONSRaidTools:Print(msg)
+    if not msg then
+        return
+    end
+    local prefix = "|cff00ff00ONSRaidTools|r: "
+    DEFAULT_CHAT_FRAME:AddMessage(prefix .. msg)
+end
+
+function ONSRaidTools:GetBossNameByModuleAndIndex(moduleName, index)
+    if not moduleName or not index then return end
+    index = tonumber(index)
+    local module = self.modules[moduleName]
+    if not module then return end
+    local bosses = module.bosses
+    if not bosses then return end
+    if not bosses[index] then return end
+    return bosses[index].name
+end
+
+function ONSRaidTools:CHAT_MSG_ADDON(event, prefix, msg)
+    if prefix ~= AddOnName then return end
+    local bossNum, imageNum = strsplit(",", msg)
+    if not bossNum or not imageNum then return end
+    bossNum = tonumber(bossNum)
+    imageNum = tonumber(imageNum)
+    local bossName = ONSRaidTools:GetBossNameByModuleAndIndex(ONSRaidTools.activeRaid, bossNum)
+    if not bossName then
+        bossName = "Boss" .. tostring(bossNum)
+    end
+    self:Print(string.format("Received image %d for %s", imageNum, bossName))
+
+    self:LoadEncounter(bossNum, ONSRaidTools.activeRaid, imageNum)
+end
+
+-- /ons send <bossnum> <imagenum>
+function ONSRaidTools:SendImageToRaid(bossNum, imageNum)
+    local isLeader = UnitIsGroupLeader("player", LE_PARTY_CATEGORY_HOME)
+    if not isLeader then
+        self:Print("You need to be the raid leader to send images")
+        return
+    end
+    if not bossNum then self:Print("No boss number provided") end
+    if not imageNum then self:Print("No image number provided") end
+
+    local bossName = ONSRaidTools:GetBossNameByModuleAndIndex(ONSRaidTools.activeRaid, bossNum)
+    if not bossName then
+        bossName = "Boss" .. tostring(bossNum)
+    end
+    self:Print(string.format("Sending image %d for %s", imageNum, bossName))
+    local msg = string.format("%s,%s", bossNum, imageNum)
+    C_ChatInfo.SendAddonMessage(AddOnName, msg, "RAID")
+end
+
 SLASH_ONS1 = "/ons"
 
 SlashCmdList["ONS"] = function(msg)
     if msg == "settings" or msg == "config" then
         ONSRaidTools:OpenSettings()
+    elseif string.match(msg, "send") then
+        local _, _, bossnum, imagenum = string.find(msg, "send%s+(%d+)%s+(%d+)")
+        if not bossnum or not imagenum then
+            ONSRaidTools:Print("Usage: /ons send <bossnum> <imagenum>")
+            return
+        end
+        ONSRaidTools:SendImageToRaid(bossnum, imagenum)
     elseif msg == "minimap" then
         ONSRaidTools:ToggleMinimapButton()
     else

@@ -5,6 +5,7 @@ local ONSRaidTools = LibStub("AceAddon-3.0"):GetAddon(AddOnName)
 -- TODO: add custom tooltips to the tabs
 -- TODO: raidleader slash cmd and global api to force open an image on all raid members
 -- TODO: Add recipe module
+-- TODO: Add boss title to the image view (-> anchor to menu button to hide)
 
 
 local VIEWS = {
@@ -12,7 +13,7 @@ local VIEWS = {
     SELECT = "select"
 }
 
-local activeRaid = "DFS1"
+
 local moveCrosshair = "Interface/CURSOR/UI-Cursor-Move.crosshair"
 local function createWindow()
     -- Create the frame
@@ -177,16 +178,20 @@ function ONSRaidTools:LoadImageToView(img)
     self.imageView.img:SetTexture(img)
 end
 
-function ONSRaidTools:CreateImageViewTabs(tabsTable)
+function ONSRaidTools:CreateImageViewTabs(tabsTable, overrideIntitial)
     if not tabsTable then return end
     local tabs = components:CreateTabs(tabsTable)
     components:LayoutTabs(tabs, self.imageView.tabsHolder, 5, 5, 4)
+    local indexToLoad = 1
+    if overrideIntitial then
+        indexToLoad = overrideIntitial
+    end
     -- Set the first tab as active
-    tabsTable[1].callback()
-    components:SetActiveTab(tabs, 1)
+    tabsTable[indexToLoad].callback()
+    components:SetActiveTab(tabs, indexToLoad)
 end
 
-function ONSRaidTools:LoadCurrentImageCollection()
+function ONSRaidTools:LoadCurrentImageCollection(overrideIntitial)
     if not self.db.global.loadedEncounter then return end
     if not self.db.global.loadedEncounter.images then return end
 
@@ -205,11 +210,11 @@ function ONSRaidTools:LoadCurrentImageCollection()
         }
         table.insert(tabsTable, tab)
     end
-    self:CreateImageViewTabs(tabsTable)
+    self:CreateImageViewTabs(tabsTable, overrideIntitial)
 end
 
 -- Example: ONSRaidTools:LoadEncounter(1, "dfs1")
-function ONSRaidTools:LoadEncounter(encounterIndex, moduleName)
+function ONSRaidTools:LoadEncounter(encounterIndex, moduleName, overrideIntitial)
     -- encounterIndex -> index of encounter in the raid
     if not encounterIndex then
         error("encounterIndex not found")
@@ -236,7 +241,7 @@ function ONSRaidTools:LoadEncounter(encounterIndex, moduleName)
     end
     self.db.global.loadedEncounter.images = images
     self.db.global.loadedEncounter.info = info
-    self:LoadCurrentImageCollection()
+    self:LoadCurrentImageCollection(overrideIntitial)
 end
 
 function ONSRaidTools:InitImageView()
@@ -268,9 +273,6 @@ local function createSelectView()
 end
 
 
-
-
-
 function ONSRaidTools:InitSelectView()
     self.selectView = createSelectView()
     self:AddListernersToView(self.selectView)
@@ -284,7 +286,7 @@ function ONSRaidTools:InitSelectView()
 
     -- only for hardcoded raid
     -- Set the module to the module with the specified name
-    local module = self.modules[activeRaid]
+    local module = self.modules[self.activeRaid]
     -- Check if the module is set, if not return
     if not module then
         error("module not found")
@@ -314,7 +316,7 @@ function ONSRaidTools:InitSelectView()
             button.icon:SetTexture(bossInfo.icon)
             button.label:SetText(bossInfo.name)
             button:SetScript("OnClick", function(f)
-                self:LoadEncounter(bossIndex, activeRaid)
+                self:LoadEncounter(bossIndex, self.activeRaid)
                 self:SetView(self.imageView)
             end)
             button:Show()
@@ -337,7 +339,7 @@ function ONSRaidTools:setupMainWindow()
     if self.DEV then
         C_Timer.After(0.1, function()
             ViragDevTool:AddData(self)
-            self:LoadEncounter(1, "DFS2")
+            self:LoadEncounter(1, "DFS1")
         end)
     end
     self:LoadOptionsValues()

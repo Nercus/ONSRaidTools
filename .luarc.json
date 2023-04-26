@@ -13,7 +13,9 @@
         "CreateFramePool",
         "DARKYELLOW_FONT_COLOR",
         "InterfaceOptionsFrame",
-        "InterfaceOptionsFrame_OpenToCategory"
+        "InterfaceOptionsFrame_OpenToCategory",
+        "LE_PARTY_CATEGORY_HOME",
+        "DEFAULT_CHAT_FRAME"
     ],
     "workspace.ignoreDir": [
         ".vscode",
