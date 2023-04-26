@@ -43,6 +43,13 @@
                                 <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-6" y="6" />
                             </Anchors>
                         </Texture>
+                        <FontString parentKey="bossName" inherits="GameFontNormal" justifyH="LEFT">
+                            <Size x="263" y="30" />
+                            <Anchors>
+                                <Anchor point="LEFT" relativePoint="RIGHT" x="3"/>
+                                <Anchor relativeTo="$parent" point="RIGHT" relativePoint="RIGHT" />
+                            </Anchors>
+                        </FontString>
                     </Layer>
                     <Layer level="HIGHLIGHT">
                         <Texture file="Interface\Addons\ONSRaidTools\assets\menuicon">

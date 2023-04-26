@@ -213,6 +213,13 @@ function ONSRaidTools:LoadCurrentImageCollection(overrideIntitial)
     self:CreateImageViewTabs(tabsTable, overrideIntitial)
 end
 
+function ONSRaidTools:SetEncounterNameByIndex(index)
+    if not index then return end
+    local bossName = self:GetBossNameByModuleAndIndex(self.activeRaid, index)
+    if not bossName then return end
+    self.imageView.menuButton.bossName:SetText(bossName)
+end
+
 -- Example: ONSRaidTools:LoadEncounter(1, "dfs1")
 function ONSRaidTools:LoadEncounter(encounterIndex, moduleName, overrideIntitial)
     -- encounterIndex -> index of encounter in the raid
@@ -241,6 +248,7 @@ function ONSRaidTools:LoadEncounter(encounterIndex, moduleName, overrideIntitial
     end
     self.db.global.loadedEncounter.images = images
     self.db.global.loadedEncounter.info = info
+    self:SetEncounterNameByIndex(encounterIndex)
     self:LoadCurrentImageCollection(overrideIntitial)
 end
 
