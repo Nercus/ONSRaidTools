@@ -5,7 +5,9 @@
 ## Title: ONSRaidTools
 ## Notes: An addon to show images for a boss
 ## SavedVariables: ONSRaidToolsDB
-
+## OptionalDeps: Ace3
+## X-Embeds: Ace3
+## X-Curse-Project-ID: 856040
 
 # Load frames, libs and components
 embeds.xml
