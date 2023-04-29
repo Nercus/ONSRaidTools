@@ -4,9 +4,9 @@ local ONSRaidTools = LibStub("AceAddon-3.0"):NewAddon(AddOnName, "AceEvent-3.0")
 local AceConfig = LibStub("AceConfig-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 
--- @do-not-package@
+--@do-not-package@
 ONSRaidTools.DEV = true
--- @end-do-not-package@
+--@end-do-not-package@
 
 -- default active raid
 ONSRaidTools.activeRaid = "DFS2"
