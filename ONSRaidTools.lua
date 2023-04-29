@@ -4,11 +4,12 @@ local ONSRaidTools = LibStub("AceAddon-3.0"):NewAddon(AddOnName, "AceEvent-3.0")
 local AceConfig = LibStub("AceConfig-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 
--- FIXME: don't package that
+-- @do-not-package@
 ONSRaidTools.DEV = true
+-- @end-do-not-package@
 
-
-ONSRaidTools.activeRaid = "DFS1"
+-- default active raid
+ONSRaidTools.activeRaid = "DFS2"
 
 local LDBIcon = LibStub("LibDBIcon-1.0")
 local defaults = {
@@ -102,21 +103,8 @@ local ONSOptionsTable = {
                 return ONSRaidTools.db.global.options.scale
             end,
             set = function(_, value)
-                -- FIXME: changing the scale and reloading moves the window
                 ONSRaidTools.db.global.options.scale = value
                 ONSRaidTools.mainWindow:SetScale(value)
-                ONSRaidTools.mainWindow:StartMoving()
-                ONSRaidTools.mainWindow:StopMovingOrSizing()
-                local point, _, relativePoint, xOfs, yOfs = ONSRaidTools.mainWindow:GetPoint()
-                print("A", point, relativePoint, xOfs, yOfs)
-                if point and relativePoint and xOfs and xOfs then
-                    ONSRaidTools.db.global.position = {
-                        point = point,
-                        relativePoint = relativePoint,
-                        x = xOfs,
-                        y = yOfs
-                    }
-                end
             end
         },
     }
@@ -138,7 +126,6 @@ function ONSRaidTools:OnEnable()
     if self.DEV then
         C_Timer.After(1, function()
             self:ToggleFrame()
-            ViragDevTool:AddData(components)
         end)
     end
     ONSRaidTools:RegisterEvent("MODIFIER_STATE_CHANGED")
@@ -245,6 +232,10 @@ SlashCmdList["ONS"] = function(msg)
         ONSRaidTools:SendImageToRaid(bossnum, imagenum)
     elseif msg == "minimap" then
         ONSRaidTools:ToggleMinimapButton()
+    elseif msg == "DFS1" or msg == "DFS2" then
+        ONSRaidTools:Print(string.format("Loaded module %s", msg))
+        ONSRaidTools.activeRaid = msg
+        ONSRaidTools:SetActiveRaidToSelectView()
     else
         ONSRaidTools:ToggleFrame()
     end

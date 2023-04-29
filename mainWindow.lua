@@ -1,12 +1,7 @@
 local AddOnName, components = ...
 local ONSRaidTools = LibStub("AceAddon-3.0"):GetAddon(AddOnName)
 
--- FIXME: changing the scale changes the position of the frame after reload https://discord.com/channels/327414731654692866/327533449164488706/600207826559696916
--- TODO: add custom tooltips to the tabs
--- TODO: raidleader slash cmd and global api to force open an image on all raid members
 -- TODO: Add recipe module
--- TODO: Add boss title to the image view (-> anchor to menu button to hide)
-
 
 local VIEWS = {
     IMAGE = "image",
@@ -17,8 +12,7 @@ local VIEWS = {
 local moveCrosshair = "Interface/CURSOR/UI-Cursor-Move.crosshair"
 local function createWindow()
     -- Create the frame
-    local frame = CreateFrame("Frame", AddOnName .. "MainWindow", UIParent, "ONSImagViewMainWindowTemplate")
-    frame:SetPoint("CENTER")
+    local frame = CreateFrame("Frame", AddOnName .. "mainWindow", UIParent, "ONSImagViewMainWindowTemplate")
     return frame
 end
 
@@ -97,6 +91,7 @@ function ONSRaidTools:AddMainListeners()
     local frame = self.mainWindow
     frame:SetScript("OnDragStart", function(f)
         f:StartMoving()
+        f:SetUserPlaced(false)
         SetCursor(moveCrosshair)
     end)
 
@@ -105,7 +100,7 @@ function ONSRaidTools:AddMainListeners()
         SetCursor(nil)
         -- Get the position of the frame
         local point, _, relativePoint, xOfs, yOfs = f:GetPoint()
-        print("B", point, relativePoint, xOfs, yOfs)
+        ViragDevTool:AddData({ point, relativePoint, xOfs, yOfs }, "dragStop")
         -- If we found a point then save that position
         if point and relativePoint and xOfs and xOfs then
             self.db.global.position = {
@@ -134,8 +129,8 @@ function ONSRaidTools:SetInitPosition()
         relativePoint = self.db.global.position.relativePoint
         point = self.db.global.position.point
     end
-
     local frame = self.mainWindow
+    ViragDevTool:AddData({ x, y, point, relativePoint }, "init")
     frame:SetPoint(point, UIParent, relativePoint, x, y)
 end
 
@@ -276,10 +271,38 @@ function ONSRaidTools:InitImageView()
 end
 
 local function createSelectView()
-    local frame = CreateFrame("Frame", AddOnName .. "SelectView", UIParent, "ONSSelectViewTemplate")
+    local frame = CreateFrame("Frame", nil, UIParent, "ONSSelectViewTemplate")
     return frame
 end
 
+
+function ONSRaidTools:SetActiveRaidToSelectView()
+    -- only for hardcoded raid
+    -- Set the module to the module with the specified name
+    local module = self.modules[self.activeRaid]
+    -- Check if the module is set, if not return
+    if not module then
+        error("module not found")
+        return
+    end
+    for i, button in ipairs(self.selectView.encounterButtons) do
+        button:Hide()
+    end
+    local buttonIndex = 1
+    for bossIndex, bossInfo in ipairs(module.bosses) do
+        if module.images[bossIndex] then
+            local button = self.selectView.encounterButtons[buttonIndex]
+            button.icon:SetTexture(bossInfo.icon)
+            button.label:SetText(bossInfo.name)
+            button:SetScript("OnClick", function(f)
+                self:LoadEncounter(bossIndex, self.activeRaid)
+                self:SetView(self.imageView)
+            end)
+            button:Show()
+            buttonIndex = buttonIndex + 1
+        end
+    end
+end
 
 function ONSRaidTools:InitSelectView()
     self.selectView = createSelectView()
@@ -292,48 +315,30 @@ function ONSRaidTools:InitSelectView()
         self:OpenSettings()
     end)
 
-    -- only for hardcoded raid
-    -- Set the module to the module with the specified name
-    local module = self.modules[self.activeRaid]
-    -- Check if the module is set, if not return
-    if not module then
-        error("module not found")
-        return
-    end
     local gap = 5
     local row = 0
+    local max = 14
+    self.selectView.encounterButtons = {}
 
-
-
-    local buttonIndex = 1
-    for bossIndex, bossInfo in ipairs(module.bosses) do
-        if module.images[bossIndex] then
-            local button = CreateFrame("Button", nil, self.selectView.encounterButtonHolder,
-                "ONSRaidToolsEncounterButtonTemplate")
-            local width = button:GetWidth()
-            local height = button:GetHeight()
-            local col = (buttonIndex % 2 == 0 and 2 or 1)
-            if col == 1 then
-                row = row + 1
-            end
-
-            local xOffset = (col - 1) * (width + gap)
-            local yOffset = -((row - 1) * (height + gap))
-
-            button:SetPoint("TOPLEFT", self.selectView.encounterButtonHolder, "TOPLEFT", xOffset, yOffset)
-            button.icon:SetTexture(bossInfo.icon)
-            button.label:SetText(bossInfo.name)
-            button:SetScript("OnClick", function(f)
-                self:LoadEncounter(bossIndex, self.activeRaid)
-                self:SetView(self.imageView)
-            end)
-            button:Show()
-            buttonIndex = buttonIndex + 1
+    for buttonIndex = 1, max do
+        local button = CreateFrame("Button", nil, self.selectView.encounterButtonHolder,
+            "ONSRaidToolsEncounterButtonTemplate")
+        local width = button:GetWidth()
+        local height = button:GetHeight()
+        local col = (buttonIndex % 2 == 0 and 2 or 1)
+        if col == 1 then
+            row = row + 1
         end
+
+        local xOffset = (col - 1) * (width + gap)
+        local yOffset = -((row - 1) * (height + gap))
+
+        button:SetPoint("TOPLEFT", self.selectView.encounterButtonHolder, "TOPLEFT", xOffset, yOffset)
+        button:Hide()
+        table.insert(self.selectView.encounterButtons, button)
     end
 
-
-
+    self:SetActiveRaidToSelectView()
     self.selectView.name = VIEWS.SELECT
 end
 
@@ -347,7 +352,7 @@ function ONSRaidTools:setupMainWindow()
     if self.DEV then
         C_Timer.After(0.1, function()
             ViragDevTool:AddData(self)
-            self:LoadEncounter(1, "DFS1")
+            self:LoadEncounter(1, self.activeRaid)
         end)
     end
     self:LoadOptionsValues()
