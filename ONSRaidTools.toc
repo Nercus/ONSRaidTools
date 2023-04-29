@@ -1,6 +1,6 @@
 ## Interface: 100007
 ## Author: Nerc, Eminos
-## Version: 0.1a
+## Version: 1.0.0
 ## License: GPLv3
 ## Title: ONSRaidTools
 ## Notes: An addon to show images for a boss
