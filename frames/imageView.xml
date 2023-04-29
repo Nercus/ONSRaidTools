@@ -43,7 +43,8 @@
                                 <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-6" y="6" />
                             </Anchors>
                         </Texture>
-                        <FontString parentKey="bossName" inherits="GameFontNormal" justifyH="LEFT">
+                        <FontString parentKey="bossName" inherits="GameFontNormalShadowHuge2" justifyH="LEFT">
+                            <Color r="1" g="1" b="1" a="1"/>
                             <Size x="263" y="30" />
                             <Anchors>
                                 <Anchor point="LEFT" relativePoint="RIGHT" x="3"/>
