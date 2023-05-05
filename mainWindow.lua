@@ -100,7 +100,7 @@ function ONSRaidTools:AddMainListeners()
         SetCursor(nil)
         -- Get the position of the frame
         local point, _, relativePoint, xOfs, yOfs = f:GetPoint()
-        ViragDevTool:AddData({ point, relativePoint, xOfs, yOfs }, "dragStop")
+       -- ViragDevTool:AddData({ point, relativePoint, xOfs, yOfs }, "dragStop")
         -- If we found a point then save that position
         if point and relativePoint and xOfs and xOfs then
             self.db.global.position = {
@@ -130,7 +130,7 @@ function ONSRaidTools:SetInitPosition()
         point = self.db.global.position.point
     end
     local frame = self.mainWindow
-    ViragDevTool:AddData({ x, y, point, relativePoint }, "init")
+   -- ViragDevTool:AddData({ x, y, point, relativePoint }, "init")
     frame:SetPoint(point, UIParent, relativePoint, x, y)
 end
 
@@ -351,7 +351,7 @@ function ONSRaidTools:setupMainWindow()
     self:SetView(self.imageView)
     if self.DEV then
         C_Timer.After(0.1, function()
-            ViragDevTool:AddData(self)
+           -- ViragDevTool:AddData(self)
             self:LoadEncounter(1, self.activeRaid)
         end)
     end
