@@ -5,6 +5,7 @@
 ## Title: ONSRaidTools
 ## Notes: An addon to show images for a boss
 ## SavedVariables: ONSRaidToolsDB
+## IconTexture: Interface\AddOns\ONSRaidTools\assets\onsIcon.blp
 ## OptionalDeps: Ace3
 ## X-Embeds: Ace3
 ## X-Curse-Project-ID: 856040
