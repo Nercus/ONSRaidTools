@@ -4,9 +4,6 @@ local ONSRaidTools = LibStub("AceAddon-3.0"):NewAddon(AddOnName, "AceEvent-3.0")
 local AceConfig = LibStub("AceConfig-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 
---@do-not-package@
-ONSRaidTools.DEV = true
---@end-do-not-package@
 
 -- default active raid
 ONSRaidTools.activeRaid = "DFS2"
@@ -123,11 +120,6 @@ function ONSRaidTools:LoadOptionsValues()
 end
 
 function ONSRaidTools:OnEnable()
-    if self.DEV then
-        C_Timer.After(1, function()
-            self:ToggleFrame()
-        end)
-    end
     ONSRaidTools:RegisterEvent("MODIFIER_STATE_CHANGED")
     ONSRaidTools:RegisterEvent("CHAT_MSG_ADDON")
     AceConfig:RegisterOptionsTable(AddOnName, ONSOptionsTable)
