@@ -162,6 +162,7 @@ function ONSRaidTools:SetView(view)
     view:SetPoint("TOPLEFT", self.mainWindow, "TOPLEFT", 0, 0)
     view:SetPoint("BOTTOMRIGHT", self.mainWindow, "BOTTOMRIGHT", 0, 0)
     view:Show()
+    self:UpdateImageViewMouseOverState()
     self.activeView = view.name
 end
 
@@ -243,6 +244,7 @@ function ONSRaidTools:LoadEncounter(encounterIndex, moduleName, overrideIntitial
     self.db.global.loadedEncounter.info = info
     self:SetEncounterNameByIndex(encounterIndex)
     self:LoadCurrentImageCollection(overrideIntitial)
+    self:SetView(self.imageView)
 end
 
 function ONSRaidTools:InitImageView()
