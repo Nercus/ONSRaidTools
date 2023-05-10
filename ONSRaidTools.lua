@@ -32,8 +32,15 @@ local defaults = {
 }
 
 
+local elapsed = 0;
+local delay = 2;
+local r, g, b = 0.8, 0, 1;
+local r2, g2, b2 = random(2) - 1, random(2) - 1, random(2) - 1;
+local colorOverlay = CreateFrame("Frame");
 
-local ONSRaidToolsBroker = LibStub("LibDataBroker-1.1"):NewDataObject(AddOnName, {
+-- use the idea from weakauras: https://github.com/WeakAuras/WeakAuras2/blob/main/WeakAuras/WeakAuras.lua#L1017
+local ONSRaidToolsBroker
+ONSRaidToolsBroker = LibStub("LibDataBroker-1.1"):NewDataObject(AddOnName, {
     type = "data source",
     icon = "Interface\\Addons\\ONSRaidTools\\assets\\onsIcon",
     OnClick = function(self, button)
@@ -42,7 +49,25 @@ local ONSRaidToolsBroker = LibStub("LibDataBroker-1.1"):NewDataObject(AddOnName,
     OnTooltipShow = function(tooltip)
         tooltip:AddLine(AddOnName)
         tooltip:AddLine("Click to toggle the main window")
-    end
+        colorOverlay:SetScript("OnUpdate", function(self, elaps)
+            elapsed = elapsed + elaps;
+            if (elapsed > delay) then
+                elapsed = elapsed - delay;
+                r, g, b = r2, g2, b2;
+                r2, g2, b2 = random(2) - 1, random(2) - 1, random(2) - 1;
+            end
+            ONSRaidToolsBroker.r = r + (r2 - r) * elapsed / delay;
+            ONSRaidToolsBroker.g = g + (g2 - g) * elapsed / delay;
+            ONSRaidToolsBroker.b = b + (b2 - b) * elapsed / delay;
+        end);
+    end,
+    OnLeave = function(self)
+        colorOverlay:SetScript("OnUpdate", nil);
+        GameTooltip:Hide();
+    end,
+    r = 0.6,
+    g = 0,
+    b = 1
 })
 
 

@@ -1,1 +1,1 @@
-- First beta release
+- First release
