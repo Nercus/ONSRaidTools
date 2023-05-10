@@ -14,11 +14,11 @@ module.bosses = {
     },
     [2] = {
         ["icon"] = 5161744,
-        ["name"] = "Molgoth"
+        ["name"] = "Amalgamation"
     },
     [3] = {
         ["icon"] = 5161744,
-        ["name"] = "Dracthyr"
+        ["name"] = "Experiments"
     },
     [4] = {
         ["icon"] = 5161751,
