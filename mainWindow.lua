@@ -197,6 +197,10 @@ function ONSRaidTools:LoadCurrentImageCollection(overrideIntitial)
             label = "Image " .. i,
             callback = function()
                 self:LoadImageToView(path)
+                self.active.image = i
+                if self.WeakAurasLoaded then
+                    WeakAuras.ScanEvents("ONSRAIDTOOLS_IMAGE_CHANGED")
+                end
             end,
             onLeave = function()
                 self:UpdateImageViewMouseOverState()
@@ -240,8 +244,17 @@ function ONSRaidTools:LoadEncounter(encounterIndex, moduleName, overrideIntitial
         error("info not found")
         return
     end
+
+    if self.WeakAurasLoaded then
+        WeakAuras.ScanEvents("ONSRAIDTOOLS_IMAGE_CHANGED")
+    end
     self.db.global.loadedEncounter.images = images
     self.db.global.loadedEncounter.info = info
+    self.active = {
+        encounterIndex = encounterIndex,
+        moduleName = moduleName,
+        image = overrideIntitial or 1
+    }
     self:SetEncounterNameByIndex(encounterIndex)
     self:LoadCurrentImageCollection(overrideIntitial)
     self:SetView(self.imageView)

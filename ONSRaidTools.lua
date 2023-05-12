@@ -150,11 +150,16 @@ function ONSRaidTools:OnEnable()
     AceConfig:RegisterOptionsTable(AddOnName, ONSOptionsTable)
     self.optionsFrame = AceConfigDialog:AddToBlizOptions(AddOnName, AddOnName)
     C_ChatInfo.RegisterAddonMessagePrefix(AddOnName)
+    self.WeakAurasLoaded = IsAddOnLoaded("WeakAuras")
+
+    _G["ONSRaidTools"] = {
+        ["LoadEncounter"] = ONSRaidTools.LoadEncounter,
+        ["GetActiveImage"] = function() return ONSRaidTools.active end,
+    }
 end
 
 function ONSRaidTools:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New("ONSRaidToolsDB", defaults)
-
     LDBIcon:Register(AddOnName, ONSRaidToolsBroker, self.db.global.options.minimap)
 end
 

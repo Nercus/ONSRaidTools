@@ -15,7 +15,8 @@
         "InterfaceOptionsFrame",
         "InterfaceOptionsFrame_OpenToCategory",
         "LE_PARTY_CATEGORY_HOME",
-        "DEFAULT_CHAT_FRAME"
+        "DEFAULT_CHAT_FRAME",
+        "WeakAuras"
     ],
     "workspace.ignoreDir": [
         ".vscode",
